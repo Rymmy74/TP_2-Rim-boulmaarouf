@@ -1,0 +1,74 @@
+class Spaceship:
+    def __init__(self, name, ship_type, condition="opérationnel"):
+        self.__name = name
+        self.__ship_type = ship_type
+        self.__crew = []
+        self.__condition = condition
+
+    def append_member(self, member):  # ✅ correct method signature
+        if isinstance(member, Member):
+            if len(self.__crew) < 10:
+                self.__crew.append(member)
+            else:
+                print("Capacité maximale atteinte (10 membres).")
+        else:
+            print("Seuls les objets de type Member peuvent être ajoutés.")
+
+
+
+
+""" def append_member(self, member):
+        if isinstance(member, (Operator, Mentalist)):               
+
+            if len(self.__crew) < 10:
+                self.__crew.append(member)
+            else:
+                print("Capacité maximale atteinte (10 membres).")
+        else:
+            print("Seuls les opérateurs ou mentalistes peuvent être ajoutés.") """
+
+
+
+""" isinstance(obj, Class) → checks if obj is an object created from a certain class.
+Here, member is the object we are testing.
+(Operator, Mentalist) is a tuple of classes.
+So this line means: 👉 “If member is either an Operator OR a Mentalist, then do something """
+
+
+
+
+def remove_member(self, last_name):
+        for m in self.__crew:                          #m stands for member
+            if m.get_last_name() == last_name:
+                self.__crew.remove(m)
+                return
+        print(f"Aucun membre nommé {last_name} trouvé.")
+
+def display_crew(self):
+        for m in self.__crew:
+            print(m.introduce_yourself())
+
+def check_preparation(self):
+        has_pilot = any(isinstance(m, Operator) and m.get_role() == "pilote" for m in self.__crew)
+        has_tech = any(isinstance(m, Operator) and m.get_role() == "technicien" for m in self.__crew)
+        has_mentalist = any(isinstance(m, Mentalist) and m.get_mana() >= 50 for m in self.__crew)
+        return has_pilot and has_tech and has_mentalist
+
+
+
+
+
+""" 
+for m in self.__crew → loop through every crew member.
+isinstance(m, Operator) → check if the member is an Operator.
+m.get_role() == "pilote" → check if their role is "pilote".
+any(...) → returns True if at least one member matches.
+👉 So this line means: “Is there at least one Operator whose role is 'pilote'?” """
+
+
+
+""" 
+isinstance(m, Mentalist) → is the member a Mentalist?
+m.get_mana() >= 50 → does the Mentalist have enough mana? 
+👉 So this line means: “Is there at least one Mentalist with 50 or more mana?”"""
+
