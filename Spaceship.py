@@ -1,3 +1,7 @@
+from Member import Member
+from Operator import Operator
+from Mentalist import Mentalist
+
 class Spaceship:
     def __init__(self, name, ship_type, condition="opérationnel"):
         self.__name = name
@@ -5,7 +9,8 @@ class Spaceship:
         self.__crew = []
         self.__condition = condition
 
-    def append_member(self, member):  # ✅ correct method signature
+    # --- Ajouter un membre ---
+    def append_member(self, member):
         if isinstance(member, Member):
             if len(self.__crew) < 10:
                 self.__crew.append(member)
@@ -13,7 +18,6 @@ class Spaceship:
                 print("Capacité maximale atteinte (10 membres).")
         else:
             print("Seuls les objets de type Member peuvent être ajoutés.")
-
 
 
 
