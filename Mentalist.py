@@ -1,5 +1,5 @@
-from Member import *
-from Operator import *
+from Member import Member
+from Operator import Operator
 
 class Mentalist(Member):
     def __init__(self, first_name, last_name, gender, age):
@@ -16,7 +16,11 @@ class Mentalist(Member):
     def recharge_mana(self):
         self.__mana = min(100, self.__mana + 50)
 
+
+    # --- GETTER ---
     def get_mana(self): return self.__mana
+
+    # --- SETTER ---
     def set_mana(self, mana):
         if 0 <= mana <= 100:
             self.__mana = mana

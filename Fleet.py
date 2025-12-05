@@ -13,10 +13,10 @@ class Fleet:
             print("Capacité maximale atteinte (15 vaisseaux).")
 
     # --- Statistiques ---
-    def statistics(self):
-        total_members = sum(len(ship.get_crew()) for ship in self.__spaceships)
-        total_ships = len(self.__spaceships)              #compte combien de vaisseaux sont dans la flotte.
-        print(f"Flotte {self.__name} contient {total_ships} vaisseaux et {total_members} membres.")
+def statistics(self):
+    total_members = sum(len(ship.get_crew()) for ship in self.__spaceships)
+    total_ships = len(self.__spaceships)
+    print(f"Flotte {self.__name} contient {total_ships} vaisseaux et {total_members} membres.")
 
 
 

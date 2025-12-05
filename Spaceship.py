@@ -48,19 +48,23 @@ def remove_member(self, last_name):
                 return
         print(f"Aucun membre nommé {last_name} trouvé.")
 
-def display_crew(self):
-        for m in self.__crew:
-            print(m.introduce_yourself())
+def display_crew(self):   # <-- this is the method main.py is calling
+        if not self.__crew:
+            print("Aucun membre dans l'équipage.")
+        else:
+            for m in self.__crew:
+                print(m.introduce_yourself())
 
 def check_preparation(self):
-        has_pilot = any(isinstance(m, Operator) and m.get_role() == "pilote" for m in self.__crew)
-        has_tech = any(isinstance(m, Operator) and m.get_role() == "technicien" for m in self.__crew)
-        has_mentalist = any(isinstance(m, Mentalist) and m.get_mana() >= 50 for m in self.__crew)
-        return has_pilot and has_tech and has_mentalist
+    has_pilot = any(isinstance(m, Operator) and m.get_role() == "pilote" for m in self.__crew)
+    has_tech = any(isinstance(m, Operator) and m.get_role() == "technicien" for m in self.__crew)
+    has_mentalist = any(isinstance(m, Mentalist) and m.get_mana() >= 50 for m in self.__crew)
+    return has_pilot and has_tech and has_mentalist
 
-
-
-
+def get_name(self): return self.__name
+def get_ship_type(self): return self.__ship_type
+def get_condition(self): return self.__condition
+def get_crew(self): return self.__crew
 
 """ 
 for m in self.__crew → loop through every crew member.
