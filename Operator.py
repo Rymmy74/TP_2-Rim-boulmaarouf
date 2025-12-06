@@ -12,6 +12,7 @@ class Operator(Member):
     def gain_experience(self):
         self.__experience += 1
 #it's like une reafestation +1
+
     # --- GETTERS ---
     def get_role(self): return self.__role
     def get_experience(self): return self.__experience
