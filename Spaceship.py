@@ -21,7 +21,7 @@ class Spaceship:
 
 
 
-""" def append_member(self, member):
+    """ def append_member(self, member):
         if isinstance(member, (Operator, Mentalist)):               
 
             if len(self.__crew) < 10:
@@ -33,38 +33,38 @@ class Spaceship:
 
 
 
-""" isinstance(obj, Class) → checks if obj is an object created from a certain class.
-Here, member is the object we are testing.
-(Operator, Mentalist) is a tuple of classes.
-So this line means: 👉 “If member is either an Operator OR a Mentalist, then do something """
+    """ isinstance(obj, Class) → checks if obj is an object created from a certain class.
+   Here, member is the object we are testing.
+   (Operator, Mentalist) is a tuple of classes.
+    So this line means: 👉 “If member is either an Operator OR a Mentalist, then do something """
 
 
 
 
-def remove_member(self, last_name):
+    def remove_member(self, last_name):
         for m in self.__crew:                          #m stands for member
             if m.get_last_name() == last_name:
                 self.__crew.remove(m)
                 return
         print(f"Aucun membre nommé {last_name} trouvé.")
 
-def display_crew(self):   # <-- this is the method main.py is calling
+    def display_crew(self):   # <-- this is the method main.py is calling
         if not self.__crew:
             print("Aucun membre dans l'équipage.")
         else:
             for m in self.__crew:
                 print(m.introduce_yourself())
 
-def check_preparation(self):
-    has_pilot = any(isinstance(m, Operator) and m.get_role() == "pilote" for m in self.__crew)
-    has_tech = any(isinstance(m, Operator) and m.get_role() == "technicien" for m in self.__crew)
-    has_mentalist = any(isinstance(m, Mentalist) and m.get_mana() >= 50 for m in self.__crew)
-    return has_pilot and has_tech and has_mentalist
+    def check_preparation(self):
+     has_pilot = any(isinstance(m, Operator) and m.get_role() == "pilote" for m in self.__crew)
+     has_tech = any(isinstance(m, Operator) and m.get_role() == "technicien" for m in self.__crew)
+     has_mentalist = any(isinstance(m, Mentalist) and m.get_mana() >= 50 for m in self.__crew)
+     return has_pilot and has_tech and has_mentalist
 
-def get_name(self): return self.__name
-def get_ship_type(self): return self.__ship_type
-def get_condition(self): return self.__condition
-def get_crew(self): return self.__crew
+    def get_name(self): return self.__name
+    def get_ship_type(self): return self.__ship_type
+    def get_condition(self): return self.__condition
+    def get_crew(self): return self.__crew
 
 """ 
 for m in self.__crew → loop through every crew member.
