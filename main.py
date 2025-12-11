@@ -60,7 +60,7 @@ def menu():
         print("\n=== Gestion de la flotte :", galactica.get_name(), "===")
         print("1. Renommer la flotte")
         print("2. Ajouter un vaisseau à la flotte")
-        print("3. Supprimer la flotte")   # <-- déplacé ici
+        print("3. Supprimer un vaisseau")   # <-- déplacé ici
         print("4. Ajouter un membre d'équipage")
         print("5. Supprimer un membre d'équipage")
         print("6. Afficher les informations d'un équipage")
@@ -119,26 +119,46 @@ def menu():
                     print("❌ Ajout annulé, flotte inchangée.")
 
 
-            case "3":  # Supprimer la flotte
+            case "3":  # Supprimer un vaisseau
+                # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
-                    print("❌ La flotte est déjà vide.")
+                    print("❌ Aucun vaisseau dans la flotte.")
                     continue
 
-                total_ships = len(fleet_ships)
-                total_members = sum(len(ship.get_crew()) for ship in fleet_ships)
-                print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s).")
+                # -- Affichage des vaisseaux disponibles --
+                for i, ship in enumerate(fleet_ships):
+                    print(i+1, "-", ship.get_name())
+
+                # -- Choix du vaisseau --
+                idx_input = input("Choisissez un vaisseau à supprimer (ou 'cancel') : ")
+                if idx_input.lower() == "cancel":
+                    print("❌ Suppression annulée.")
+                    continue
+
+                try:
+                    idx = int(idx_input) - 1
+                except ValueError:
+                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    continue
+
+                if idx < 0 or idx >= len(fleet_ships):
+                    print("❌ Numéro invalide. Essaie encore.")
+                    continue
+
+                ship = fleet_ships[idx]
 
                 # -- Confirmation avant suppression --
-                choice = input("Voulez-vous vraiment supprimer toute la flotte ? (o/n) : ")
+                choice = input(f"Confirmer la suppression du vaisseau '{ship.get_name()}' ? (o/n) : ")
                 if choice.lower() == "o":
-                    galactica._Fleet__spaceships.clear()
-                    print("🗑️ Flotte supprimée avec succès.")
+                    galactica._Fleet__spaceships.remove(ship)
+                    print(f"🗑️ Vaisseau '{ship.get_name()}' supprimé avec succès.")
 
                     # -- Sauvegarde (demande séparée) --
                     ask_save(galactica)
                 else:
-                    print("❌ Suppression annulée, flotte conservée.")
+                    print("❌ Suppression annulée, flotte inchangée.")
+
 
 
             case "4":
