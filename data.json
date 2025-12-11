@@ -2,7 +2,7 @@
     "_Fleet__name": "Galactica",
     "_Fleet__spaceships": [
         {
-            "_Spaceship__condition": "op\u00e9rationnel",
+            "_Spaceship__condition": "opérationnel",
             "_Spaceship__crew": [
                 {
                     "_Member__age": 48,
@@ -30,13 +30,13 @@
                 }
             ],
             "_Spaceship__name": "Bayta",
-            "_Spaceship__ship_type": "marchand"
+            "_Spaceship__shipType": "marchand"
         },
         {
-            "_Spaceship__condition": "op\u00e9rationnel",
+            "_Spaceship__condition": "opérationnel",
             "_Spaceship__crew": [],
             "_Spaceship__name": "rim",
-            "_Spaceship__ship_type": "marchand"
+            "_Spaceship__shipType": "marchand"
         }
     ]
 }
