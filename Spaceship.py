@@ -19,6 +19,33 @@ class Spaceship:
         else:
             print("Seuls les objets de type Member peuvent être ajoutés.")
 
+
+    def remove_member(self, last_name):
+        for m in self.__crew:  # m stands for member
+            if m.get_last_name() == last_name:
+                self.__crew.remove(m)
+                return
+        print(f"Aucun membre nommé {last_name} trouvé.")
+
+    def display_crew(self):   # <-- méthode appelée dans main.py
+        if not self.__crew:
+            print("Aucun membre dans l'équipage.")
+        else:
+            for m in self.__crew:
+                print(m.introduce_yourself())
+
+    def check_preparation(self):
+        has_pilot = any(isinstance(m, Operator) and m.get_role() == "pilote" for m in self.__crew)
+        has_tech = any(isinstance(m, Operator) and m.get_role() == "technicien" for m in self.__crew)
+        has_mentalist = any(isinstance(m, Mentalist) and m.get_mana() >= 50 for m in self.__crew)
+        return has_pilot and has_tech and has_mentalist
+
+    # --- GETTERS ---
+    def get_name(self): return self.__name
+    def get_ship_type(self): return self.__ship_type
+    def get_condition(self): return self.__condition
+    def get_crew(self): return self.__crew
+
     """ def append_member(self, member):
         if isinstance(member, (Operator, Mentalist)):               
 
@@ -35,51 +62,6 @@ class Spaceship:
     So this line means: 👉 “If member is either an Operator OR a Mentalist, then do something """
 
 
-    def remove_member(self, last_name):
-        for m in self.__crew:                          #m stands for member
-            if m.get_last_name() == last_name:
-                self.__crew.remove(m)
-                return
-        print(f"Aucun membre nommé {last_name} trouvé.")
-
-    def display_crew(self):   # <-- this is the method main.py is calling
-        if not self.__crew:
-            print("Aucun membre dans l'équipage.")
-        else:
-            for m in self.__crew:
-                print(m.introduce_yourself())
-
-    def check_preparation(self):
-        has_pilot = any(isinstance(m, Operator) and m.get_role() == "pilote" for m in self.__crew)
-        has_tech = any(isinstance(m, Operator) and m.get_role() == "technicien" for m in self.__crew)
-        has_mentalist = any(isinstance(m, Mentalist) and m.get_mana() >= 50 for m in self.__crew)
-        return has_pilot and has_tech and has_mentalist
-
-    def get_name(self): return self.__name
-    def get_ship_type(self): return self.__ship_type
-    def get_condition(self): return self.__condition
-    def get_crew(self): return self.__crew
-
-    # --- Nouvelle méthode pour sauvegarde ---
-    def to_dict(self):
-        return {
-            "name": self.__name,
-            "shipType": self.__ship_type,
-            "condition": self.__condition,
-            "crew": [member.to_dict() for member in self.__crew]
-        }
-
-    # --- Nouvelle méthode pour chargement ---
-    @staticmethod
-    def from_dict(data):
-        ship = Spaceship(data["name"], data["shipType"], data["condition"])
-        for member_data in data["crew"]:
-            if "role" in member_data:  # si c'est un Operator
-                member = Operator.from_dict(member_data)
-            else:  # sinon c'est un Mentalist
-                member = Mentalist.from_dict(member_data)
-            ship.append_member(member)
-        return ship
 
 
 """ 

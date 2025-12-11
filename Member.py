@@ -22,22 +22,3 @@ class Member:
     def set_age(self, new_age):
         if new_age > 0:
             self.__age = new_age
-
-    # --- Nouvelle méthode pour sauvegarde ---
-    def to_dict(self):
-        return {
-            "first_name": self.__first_name,
-            "last_name": self.__last_name,
-            "gender": self.__gender,
-            "age": self.__age
-        }
-
-    # --- Nouvelle méthode pour chargement ---
-    @staticmethod
-    def from_dict(data):
-        return Member(
-            data["first_name"],
-            data["last_name"],
-            data["gender"],
-            data["age"]
-        )
