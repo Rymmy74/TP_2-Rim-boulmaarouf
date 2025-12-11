@@ -2,11 +2,47 @@ from Fleet import Fleet
 from Spaceship import Spaceship
 from Operator import Operator
 from Mentalist import Mentalist
-
+from save_and_load_date import save_data, load_data
+import random
 # Créer une flotte
 galactica = Fleet("Galactica")
 
+def random_event(fleet):
+    event = random.choice(["attaque", "renfort"])
+    if event == "attaque" and fleet.get_spaceships():
+        ship = random.choice(fleet.get_spaceships())
+        ship._Spaceship__condition = "endommagé"
+        print(f"⚠️ Attaque ennemie ! Le vaisseau {ship.get_name()} est endommagé.")
+    elif event == "renfort" and fleet.get_spaceships():
+        ship = random.choice(fleet.get_spaceships())
+        new_member = Operator("Renfort", "Inconnu", "homme", 25, "technicien")
+        ship.append_member(new_member)
+        print(f"🛠️ Renfort ajouté au vaisseau {ship.get_name()}.")
+
+def global_statistics(fleet):
+    total_ships = len(fleet.get_spaceships())
+    roles = {"pilote":0, "technicien":0, "commandant":0, "mentaliste":0}
+    operational = 0
+    damaged = 0
+
+    for ship in fleet.get_spaceships():
+        if ship.get_condition() == "opérationnel":
+            operational += 1
+        else:
+            damaged += 1
+        for m in ship.get_crew():
+            if isinstance(m, Operator):
+                roles[m.get_role()] = roles.get(m.get_role(), 0) + 1
+            elif isinstance(m, Mentalist):
+                roles["mentaliste"] += 1
+
+    print(f"📊 Statistiques globales :")
+    print(f"- Nombre total de vaisseaux : {total_ships}")
+    print(f"- Membres par rôle : {roles}")
+    print(f"- Vaisseaux opérationnels : {operational}, endommagés : {damaged}")
+
 def menu():
+    global galactica
     while True:
         print("\n=== Gestion de la flotte :", galactica.get_name(), "===")
         print("1. Renommer la flotte")
@@ -15,23 +51,99 @@ def menu():
         print("4. Supprimer un membre d'équipage")
         print("5. Afficher les informations d'un équipage")
         print("6. Vérifier la préparation d'un vaisseau")
-        print("7. Afficher les statistiques de la flotte")
-        print("8. Quitter")
+        print("7. Sauvegarder la flotte")
+        print("8. Charger une flotte")
+        print("9. Afficher les statistiques globales")
+        print("10. Déclencher un événement aléatoire")
+        print("11. Quitter")
+
+from Fleet import Fleet
+from Spaceship import Spaceship
+from Operator import Operator
+from Mentalist import Mentalist
+from save_and_load_date import save_data, load_data
+import random
+
+# Flotte par défaut
+galactica = Fleet("Galactica")
+
+def random_event(fleet):
+    event = random.choice(["attaque", "renfort"])
+    if event == "attaque" and fleet.get_spaceships():
+        ship = random.choice(fleet.get_spaceships())
+        ship._Spaceship__condition = "endommagé"
+        print(f"⚠️ Attaque ennemie ! Le vaisseau {ship.get_name()} est endommagé.")
+    elif event == "renfort" and fleet.get_spaceships():
+        ship = random.choice(fleet.get_spaceships())
+        new_member = Operator("Renfort", "Inconnu", "homme", 25, "technicien")
+        ship.append_member(new_member)
+        print(f"🛠️ Renfort ajouté au vaisseau {ship.get_name()}.")
+
+def global_statistics(fleet):
+    total_ships = len(fleet.get_spaceships())
+    roles = {"pilote":0, "technicien":0, "commandant":0, "mentaliste":0}
+    operational = 0
+    damaged = 0
+
+    for ship in fleet.get_spaceships():
+        if ship.get_condition() == "opérationnel":
+            operational += 1
+        else:
+            damaged += 1
+        for m in ship.get_crew():
+            if isinstance(m, Operator):
+                roles[m.get_role()] = roles.get(m.get_role(), 0) + 1
+            elif isinstance(m, Mentalist):
+                roles["mentaliste"] += 1
+
+    print(f"📊 Statistiques globales :")
+    print(f"- Nombre total de vaisseaux : {total_ships}")
+    print(f"- Membres par rôle : {roles}")
+    print(f"- Vaisseaux opérationnels : {operational}, endommagés : {damaged}")
+
+def menu():
+    global galactica
+    while True:
+        print("\n=== Gestion de la flotte :", galactica.get_name(), "===")
+        print("1. Renommer la flotte")
+        print("2. Ajouter un vaisseau à la flotte")
+        print("3. Ajouter un membre d'équipage")
+        print("4. Supprimer un membre d'équipage")
+        print("5. Afficher les informations d'un équipage")
+        print("6. Vérifier la préparation d'un vaisseau")
+        print("7. Sauvegarder la flotte")
+        print("8. Charger une flotte")
+        print("9. Afficher les statistiques globales")
+        print("10. Déclencher un événement aléatoire")
+        print("11. Quitter")
 
         choice = input("Choisissez une option : ")
 
         match choice:
             case "1":
-                new_name = input("Nouveau nom de la flotte : ")
-                galactica._Fleet__name = new_name  # setter simplifié
+                new_name = input("Nouveau nom de la flotte (ou 'cancel') : ")
+                if new_name.lower() == "cancel":
+                    print("❌ Action annulée.")
+                    continue
+                galactica._Fleet__name = new_name
                 print("✅ Flotte renommée en", new_name)
 
             case "2":
-                name = input("Nom du vaisseau : ")
-                ship_type = input("Type du vaisseau (marchand/guerre/transport) : ")
+                name = input("Nom du vaisseau (ou 'cancel') : ")
+                if name.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                valid_types = ["marchand", "guerre", "transport"]
+                ship_type = input("Type du vaisseau (marchand/guerre/transport ou 'cancel') : ").lower()
+                if ship_type == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                if ship_type not in valid_types:
+                    print("❌ Type invalide. Choisissez parmi :", ", ".join(valid_types))
+                    continue
                 ship = Spaceship(name, ship_type)
                 galactica.append_spaceship(ship)
-                print("✅ Vaisseau ajouté :", name)
+                print("✅ Vaisseau ajouté :", name, "de type", ship_type)
 
             case "3":
                 fleet_ships = galactica.get_spaceships()
@@ -40,17 +152,40 @@ def menu():
                     continue
                 for i, ship in enumerate(fleet_ships):
                     print(i+1, "-", ship.get_name())
-                idx = int(input("Choisissez un vaisseau : ")) - 1
+                idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
+                if idx_input.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                idx = int(idx_input) - 1
                 ship = fleet_ships[idx]
 
-                role = input("Type de membre (operator/mentalist) : ")
-                first = input("Prénom : ")
-                last = input("Nom : ")
-                gender = input("Genre : ")
-                age = int(input("Âge : "))
+                role = input("Type de membre (operator/mentalist ou 'cancel') : ")
+                if role.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                first = input("Prénom (ou 'cancel') : ")
+                if first.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                last = input("Nom (ou 'cancel') : ")
+                if last.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                gender = input("Genre (ou 'cancel') : ")
+                if gender.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                age_input = input("Âge (ou 'cancel') : ")
+                if age_input.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                age = int(age_input)
 
                 if role == "operator":
-                    op_role = input("Rôle de l'opérateur (pilote/technicien/commandant) : ")
+                    op_role = input("Rôle de l'opérateur (pilote/technicien/commandant ou 'cancel') : ")
+                    if op_role.lower() == "cancel":
+                        print("❌ Ajout annulé.")
+                        continue
                     member = Operator(first, last, gender, age, op_role)
                 else:
                     member = Mentalist(first, last, gender, age)
@@ -65,9 +200,16 @@ def menu():
                     continue
                 for i, ship in enumerate(fleet_ships):
                     print(i+1, "-", ship.get_name())
-                idx = int(input("Choisissez un vaisseau : ")) - 1
+                idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
+                if idx_input.lower() == "cancel":
+                    print("❌ Action annulée.")
+                    continue
+                idx = int(idx_input) - 1
                 ship = fleet_ships[idx]
-                last_name = input("Nom du membre à supprimer : ")
+                last_name = input("Nom du membre à supprimer (ou 'cancel') : ")
+                if last_name.lower() == "cancel":
+                    print("❌ Action annulée.")
+                    continue
                 ship.remove_member(last_name)
 
             case "5":
@@ -77,7 +219,11 @@ def menu():
                     continue
                 for i, ship in enumerate(fleet_ships):
                     print(i+1, "-", ship.get_name())
-                idx = int(input("Choisissez un vaisseau : ")) - 1
+                idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
+                if idx_input.lower() == "cancel":
+                    print("❌ Action annulée.")
+                    continue
+                idx = int(idx_input) - 1
                 ship = fleet_ships[idx]
                 ship.display_crew()
 
@@ -88,7 +234,11 @@ def menu():
                     continue
                 for i, ship in enumerate(fleet_ships):
                     print(i+1, "-", ship.get_name())
-                idx = int(input("Choisissez un vaisseau : ")) - 1
+                idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
+                if idx_input.lower() == "cancel":
+                    print("❌ Action annulée.")
+                    continue
+                idx = int(idx_input) - 1
                 ship = fleet_ships[idx]
                 if ship.check_preparation():
                     print("✅ Le vaisseau est prêt au départ !")
@@ -96,9 +246,18 @@ def menu():
                     print("❌ Le vaisseau n'est pas prêt.")
 
             case "7":
-                galactica.statistics()
+                save_data(galactica)
 
             case "8":
+                galactica = load_data()
+
+            case "9":
+                global_statistics(galactica)
+
+            case "10":
+                random_event(galactica)
+
+            case "11":
                 print("👋 Au revoir !")
                 break
 
@@ -107,5 +266,3 @@ def menu():
 
 # Lancer le menu
 menu()
-
-
