@@ -73,25 +73,36 @@ def menu():
 
         match choice:
             case "1":
+                # -- Saisie du nouveau nom ou annulation --
                 new_name = input("Nouveau nom de la flotte (ou 'cancel') : ")
                 if new_name.lower() == "cancel":
                     print("❌ Action annulée.")
                     continue
 
-                choice = input(f"Voulez-vous renommer la flotte en '{new_name}' et sauvegarder ? (o/n) : ")
+                # -- Confirmation avant modification et sauvegarde --
+                choice = input(f"Confirmer le renommage en '{new_name}' et sauvegarder ? (o/n) : ")
                 if choice.lower() == "o":
+                    # -- Application de la modification en mémoire --
                     galactica._Fleet__name = new_name
                     print("✅ Flotte renommée en", new_name)
+
+                    # -- Sauvegarde persistante dans le fichier --
                     save_data(galactica)
                 else:
+                    # -- Annulation totale : aucune modification --
                     print("❌ Renommage annulé, flotte inchangée.")
 
 
+
             case "2":
+                
+                # -- Saisie du nom du vaisseau ou annulation --
                 name = input("Nom du vaisseau (ou 'cancel') : ")
                 if name.lower() == "cancel":
                     print("❌ Ajout annulé.")
                     continue
+
+                # -- Saisie et validation du type --
                 valid_types = ["marchand", "guerre", "transport"]
                 ship_type = input("Type du vaisseau (marchand/guerre/transport ou 'cancel') : ").lower()
                 if ship_type == "cancel":
@@ -100,11 +111,21 @@ def menu():
                 if ship_type not in valid_types:
                     print("❌ Type invalide. Choisissez parmi :", ", ".join(valid_types))
                     continue
-                ship = Spaceship(name, ship_type)
-                galactica.append_spaceship(ship)
-                print("✅ Vaisseau ajouté :", name, "de type", ship_type)
 
-                ask_save(galactica)
+                # -- Confirmation avant création, ajout et sauvegarde --
+                choice = input(f"Confirmer l'ajout du vaisseau '{name}' de type '{ship_type}' et sauvegarder ? (o/n) : ")
+                if choice.lower() == "o":
+                    # -- Création et ajout en mémoire --
+                    ship = Spaceship(name, ship_type)
+                    galactica.append_spaceship(ship)
+                    print("✅ Vaisseau ajouté :", name, "de type", ship_type)
+
+                    # -- Sauvegarde persistante --
+                    save_data(galactica)
+                else:
+                    # -- Annulation totale : aucune modification --
+                    print("❌ Ajout annulé, flotte inchangée.")
+
 
             case "3":  # Ajouter un membre d'équipage
                     fleet_ships = galactica.get_spaceships()
@@ -288,6 +309,9 @@ menu()
 
 
 """ quelque principe :
+case 3 :
+try → on tente une opération.
+Le -1 est nécessaire car en Python les listes commencent à 0, mais toi tu affiches à partir de 1 pour l’utilisateur.
 1_except ValueError:
 Ce bloc dit : “Si une erreur de type ValueError arrive, ne plante pas le programme. À la place, affiche un message sympa et continue.”
 Donc au lieu que ton programme crashe avec un gros message rouge, tu contrôles l’erreur et tu guides l’utilisateur. """
