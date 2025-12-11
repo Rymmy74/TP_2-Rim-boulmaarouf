@@ -79,7 +79,12 @@ def menu():
                     continue
                 galactica._Fleet__name = new_name
                 print("✅ Flotte renommée en", new_name)
-                ask_save(galactica)
+
+                choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ")
+                if choice.lower() == "o":
+                    save_data(galactica)
+                else:
+                    print("❌ Sauvegarde annulée.")
 
             case "2":
                 name = input("Nom du vaisseau (ou 'cancel') : ")
@@ -97,7 +102,11 @@ def menu():
                 ship = Spaceship(name, ship_type)
                 galactica.append_spaceship(ship)
                 print("✅ Vaisseau ajouté :", name, "de type", ship_type)
-                ask_save(galactica)
+                choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ")
+                if choice.lower() == "o":
+                    save_data(galactica)
+                else:
+                    print("❌ Sauvegarde annulée.")
 
             case "3":  # Ajouter un membre d'équipage
                 fleet_ships = galactica.get_spaceships()
@@ -157,7 +166,12 @@ def menu():
 
                 ship.append_member(member)
                 print("✅ Membre ajouté à", ship.get_name())
-                ask_save(galactica)
+
+                choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ")
+                if choice.lower() == "o":
+                    save_data(galactica)
+                else:
+                    print("❌ Sauvegarde annulée.")
 
 
             case "4":  # Supprimer un membre d'équipage
@@ -185,8 +199,12 @@ def menu():
                     print("❌ Action annulée.")
                     continue
                 ship.remove_member(last_name)
-                ask_save(galactica)
 
+                choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ")
+                if choice.lower() == "o":
+                    save_data(galactica)
+                else:
+                    print("❌ Sauvegarde annulée.")
 
             case "5":  # Afficher les informations d'un équipage
                 fleet_ships = galactica.get_spaceships()
@@ -238,7 +256,8 @@ def menu():
 
 
             case "7":
-                save_data(galactica)
+             save_data(galactica)
+             print("✅ Flotte sauvegardée avec succès.")
 
             case "8":
                 global_statistics(galactica)
