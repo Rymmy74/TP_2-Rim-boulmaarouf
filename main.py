@@ -73,7 +73,6 @@ def menu():
 
         match choice:
             case "1":
-                
                 new_name = input("Nouveau nom de la flotte (ou 'cancel') : ")
                 if new_name.lower() == "cancel":
                     print("❌ Action annulée.")
@@ -108,65 +107,86 @@ def menu():
                 ask_save(galactica)
 
             case "3":  # Ajouter un membre d'équipage
-                fleet_ships = galactica.get_spaceships()
-                if not fleet_ships:
-                    print("❌ Aucun vaisseau dans la flotte.")
-                    continue
-                for i, ship in enumerate(fleet_ships):
-                    print(i+1, "-", ship.get_name())
-                idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
-                if idx_input.lower() == "cancel":
-                    print("❌ Ajout annulé.")
-                    continue
-                try:
-                    idx = int(idx_input) - 1
-                except ValueError:
-                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
-                    continue
-                if idx < 0 or idx >= len(fleet_ships):
-                    print("❌ Numéro invalide. Essaie encore.")
-                    continue
-                ship = fleet_ships[idx]
+                    fleet_ships = galactica.get_spaceships()
+                    if not fleet_ships:
+                        print("❌ Aucun vaisseau dans la flotte.")
+                        continue
 
-                role = input("Type de membre (operator/mentalist ou 'cancel') : ")
-                if role.lower() == "cancel":
-                    print("❌ Ajout annulé.")
-                    continue
-                first = input("Prénom (ou 'cancel') : ")
-                if first.lower() == "cancel":
-                    print("❌ Ajout annulé.")
-                    continue
-                last = input("Nom (ou 'cancel') : ")
-                if last.lower() == "cancel":
-                    print("❌ Ajout annulé.")
-                    continue
-                gender = input("Genre (ou 'cancel') : ")
-                if gender.lower() == "cancel":
-                    print("❌ Ajout annulé.")
-                    continue
-                age_input = input("Âge (ou 'cancel') : ")
-                if age_input.lower() == "cancel":
-                    print("❌ Ajout annulé.")
-                    continue
-                try:
-                    age = int(age_input)
-                except ValueError:
-                    print("❌ Âge invalide. Essaie encore.")
-                    continue
-
-                if role == "operator":
-                    op_role = input("Rôle de l'opérateur (pilote/technicien/commandant ou 'cancel') : ")
-                    if op_role.lower() == "cancel":
+                    # Afficher les vaisseaux disponibles
+                    for i, ship in enumerate(fleet_ships):
+                        print(i+1, "-", ship.get_name())
+                        """ Chaque élément est séparé par un espace automatiquement avec la virgule. """
+                    idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
+                    if idx_input.lower() == "cancel":
                         print("❌ Ajout annulé.")
                         continue
-                    member = Operator(first, last, gender, age, op_role)
-                else:
-                    member = Mentalist(first, last, gender, age)
+                    try:           #try → on tente une opération.
+                        idx = int(idx_input) - 1        #Le -1 est nécessaire car en Python les listes commencent à 0, mais toi tu affiches à partir de 1 pour l’utilisateur.
+                      
+                    except ValueError:       
 
-                ship.append_member(member)
-                print("✅ Membre ajouté à", ship.get_name())
+                        print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                        continue
+                    if idx < 0 or idx >= len(fleet_ships):
+                        print("❌ Numéro invalide. Essaie encore.")
+                        continue
+                    ship = fleet_ships[idx]
 
-                ask_save(galactica)
+                    # Choix du rôle
+                    role = input("Type de membre (operator/mentalist ou 'cancel') : ").lower()
+                    if role == "cancel":
+                        print("❌ Ajout annulé.")
+                        continue
+
+                    # Prénom
+                    first = input("Prénom (ou 'cancel') : ")
+                    if first.lower() == "cancel":
+                        print("❌ Ajout annulé.")
+                        continue
+
+                    # Nom
+                    last = input("Nom (ou 'cancel') : ")
+                    if last.lower() == "cancel":
+                        print("❌ Ajout annulé.")
+                        continue
+
+                    # Genre avec validation stricte
+                    gender = input("Genre (femme/homme/autre ou 'cancel') : ").lower()
+                    if gender == "cancel":
+                        print("❌ Ajout annulé.")
+                        continue
+                    if gender not in ["femme", "homme", "autre"]:
+                        print("❌ Genre invalide. Choisissez parmi : femme, homme, autre.")
+                        continue
+
+                    # Âge
+                    age_input = input("Âge (ou 'cancel') : ")
+                    if age_input.lower() == "cancel":
+                        print("❌ Ajout annulé.")
+                        continue
+                    try:
+                        age = int(age_input)
+                    except ValueError:
+                        print("❌ Âge invalide. Essaie encore.")
+                        continue
+
+                    # Création du membre selon le rôle
+                    if role == "operator":
+                        op_role = input("Rôle de l'opérateur (pilote/technicien/commandant ou 'cancel') : ")
+                        if op_role.lower() == "cancel":
+                            print("❌ Ajout annulé.")
+                            continue
+                        member = Operator(first, last, gender, age, op_role)
+                    else:
+                        member = Mentalist(first, last, gender, age)
+
+                    # Ajout au vaisseau
+                    ship.append_member(member)
+                    print("✅ Membre ajouté à", ship.get_name())
+
+                    # Demande de sauvegarde
+                    ask_save(galactica)
+
 
             case "4":  # Supprimer un membre d'équipage
                 fleet_ships = galactica.get_spaceships()
@@ -263,3 +283,11 @@ def menu():
 
 # Lancer le menu
 menu()
+
+
+
+
+""" quelque principe :
+1_except ValueError:
+Ce bloc dit : “Si une erreur de type ValueError arrive, ne plante pas le programme. À la place, affiche un message sympa et continue.”
+Donc au lieu que ton programme crashe avec un gros message rouge, tu contrôles l’erreur et tu guides l’utilisateur. """
