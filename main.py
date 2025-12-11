@@ -120,17 +120,14 @@ def menu():
 
 
             case "3":  # Supprimer un vaisseau
-                # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
                     continue
 
-                # -- Affichage des vaisseaux disponibles --
                 for i, ship in enumerate(fleet_ships):
                     print(i+1, "-", ship.get_name())
 
-                # -- Choix du vaisseau --
                 idx_input = input("Choisissez un vaisseau à supprimer (ou 'cancel') : ")
                 if idx_input.lower() == "cancel":
                     print("❌ Suppression annulée.")
@@ -151,13 +148,15 @@ def menu():
                 # -- Confirmation avant suppression --
                 choice = input(f"Confirmer la suppression du vaisseau '{ship.get_name()}' ? (o/n) : ")
                 if choice.lower() == "o":
+                    # -- Suppression en mémoire --
                     galactica._Fleet__spaceships.remove(ship)
-                    print(f"🗑️ Vaisseau '{ship.get_name()}' supprimé avec succès.")
+                    print(f"🛸 Vaisseau '{ship.get_name()}' supprimé avec succès.")
 
-                    # -- Sauvegarde (demande séparée) --
+                    # -- Confirmation de sauvegarde --
                     ask_save(galactica)
                 else:
                     print("❌ Suppression annulée, flotte inchangée.")
+
 
 
 
