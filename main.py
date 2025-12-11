@@ -99,7 +99,7 @@ def menu():
                 print("✅ Vaisseau ajouté :", name, "de type", ship_type)
                 ask_save(galactica)
 
-            case "3":
+            case "3":  # Ajouter un membre d'équipage
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
@@ -110,7 +110,14 @@ def menu():
                 if idx_input.lower() == "cancel":
                     print("❌ Ajout annulé.")
                     continue
-                idx = int(idx_input) - 1
+                try:
+                    idx = int(idx_input) - 1
+                except ValueError:
+                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    continue
+                if idx < 0 or idx >= len(fleet_ships):
+                    print("❌ Numéro invalide. Essaie encore.")
+                    continue
                 ship = fleet_ships[idx]
 
                 role = input("Type de membre (operator/mentalist ou 'cancel') : ")
@@ -133,7 +140,11 @@ def menu():
                 if age_input.lower() == "cancel":
                     print("❌ Ajout annulé.")
                     continue
-                age = int(age_input)
+                try:
+                    age = int(age_input)
+                except ValueError:
+                    print("❌ Âge invalide. Essaie encore.")
+                    continue
 
                 if role == "operator":
                     op_role = input("Rôle de l'opérateur (pilote/technicien/commandant ou 'cancel') : ")
@@ -148,7 +159,8 @@ def menu():
                 print("✅ Membre ajouté à", ship.get_name())
                 ask_save(galactica)
 
-            case "4":
+
+            case "4":  # Supprimer un membre d'équipage
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
@@ -159,7 +171,14 @@ def menu():
                 if idx_input.lower() == "cancel":
                     print("❌ Action annulée.")
                     continue
-                idx = int(idx_input) - 1
+                try:
+                    idx = int(idx_input) - 1
+                except ValueError:
+                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    continue
+                if idx < 0 or idx >= len(fleet_ships):
+                    print("❌ Numéro invalide. Essaie encore.")
+                    continue
                 ship = fleet_ships[idx]
                 last_name = input("Nom du membre à supprimer (ou 'cancel') : ")
                 if last_name.lower() == "cancel":
@@ -168,7 +187,8 @@ def menu():
                 ship.remove_member(last_name)
                 ask_save(galactica)
 
-            case "5":
+
+            case "5":  # Afficher les informations d'un équipage
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
@@ -179,11 +199,19 @@ def menu():
                 if idx_input.lower() == "cancel":
                     print("❌ Action annulée.")
                     continue
-                idx = int(idx_input) - 1
+                try:
+                    idx = int(idx_input) - 1
+                except ValueError:
+                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    continue
+                if idx < 0 or idx >= len(fleet_ships):
+                    print("❌ Numéro invalide. Essaie encore.")
+                    continue
                 ship = fleet_ships[idx]
                 ship.display_crew()
 
-            case "6":
+
+            case "6":  # Vérifier la préparation d'un vaisseau
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
@@ -194,12 +222,20 @@ def menu():
                 if idx_input.lower() == "cancel":
                     print("❌ Action annulée.")
                     continue
-                idx = int(idx_input) - 1
+                try:
+                    idx = int(idx_input) - 1
+                except ValueError:
+                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    continue
+                if idx < 0 or idx >= len(fleet_ships):
+                    print("❌ Numéro invalide. Essaie encore.")
+                    continue
                 ship = fleet_ships[idx]
                 if ship.check_preparation():
                     print("✅ Le vaisseau est prêt au départ !")
                 else:
                     print("❌ Le vaisseau n'est pas prêt.")
+
 
             case "7":
                 save_data(galactica)
