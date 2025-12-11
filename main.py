@@ -60,14 +60,15 @@ def menu():
         print("\n=== Gestion de la flotte :", galactica.get_name(), "===")
         print("1. Renommer la flotte")
         print("2. Ajouter un vaisseau à la flotte")
-        print("3. Ajouter un membre d'équipage")
-        print("4. Supprimer un membre d'équipage")
-        print("5. Afficher les informations d'un équipage")
-        print("6. Vérifier la préparation d'un vaisseau")
-        print("7. Sauvegarder la flotte")
-        print("8. Afficher les statistiques globales")
-        print("9. Déclencher un événement aléatoire")
-        print("10. Quitter")
+        print("3. Enlever la flotte")
+        print("4. Ajouter un membre d'équipage")
+        print("5. Supprimer un membre d'équipage")
+        print("6. Afficher les informations d'un équipage")
+        print("7. Vérifier la préparation d'un vaisseau")
+        print("8. Sauvegarder la flotte")
+        print("9. Afficher les statistiques globales")
+        print("10. Déclencher un événement aléatoire")
+        print("11. Quitter")
 
         choice = input("Choisissez une option : ")
 
@@ -126,96 +127,35 @@ def menu():
                     # -- Annulation totale : aucune modification --
                     print("❌ Ajout annulé, flotte inchangée.")
 
-
             case "3":
-                    # -- Récupération des vaisseaux et vérification --
-                    fleet_ships = galactica.get_spaceships()
-                    if not fleet_ships:
-                        print("❌ Aucun vaisseau dans la flotte.")
-                        continue
+                # -- Vérification de la flotte --
+                fleet_ships = galactica.get_spaceships()
+                if not fleet_ships:
+                    print("❌ La flotte est déjà vide.")
+                    continue
 
-                    # -- Affichage des vaisseaux disponibles --
-                    for i, ship in enumerate(fleet_ships):
-                        print(i+1, "-", ship.get_name())
+                # -- Compter les vaisseaux et les membres --
+                total_ships = len(fleet_ships)
+                total_members = sum(len(ship.get_crew()) for ship in fleet_ships)
 
-                    # -- Choix du vaisseau ou annulation --
-                    idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
-                    if idx_input.lower() == "cancel":
-                        print("❌ Ajout annulé.")
-                        continue
-                    try:
-                        idx = int(idx_input) - 1  # conversion en index Python (base 0)
-                    except ValueError:
-                        print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
-                        continue
-                    if idx < 0 or idx >= len(fleet_ships):
-                        print("❌ Numéro invalide. Essaie encore.")
-                        continue
-                    ship = fleet_ships[idx]
+                # -- Informer l'utilisateur --
+                print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s) d'équipage.")
 
-                    # -- Saisie du rôle du membre --
-                    role = input("Type de membre (operator/mentalist ou 'cancel') : ").lower()
-                    if role == "cancel":
-                        print("❌ Ajout annulé.")
-                        continue
+                # -- Demander confirmation --
+                choice = input("Voulez-vous vraiment supprimer toute la flotte ? (o/n) : ")
+                if choice.lower() == "o":
+                    # -- Suppression : vider la liste des vaisseaux --
+                    galactica._Fleet__spaceships.clear()
+                    print("🗑️ Flotte supprimée avec succès.")
 
-                    # -- Saisie des informations d'identité --
-                    first = input("Prénom (ou 'cancel') : ")
-                    if first.lower() == "cancel":
-                        print("❌ Ajout annulé.")
-                        continue
+                    # -- Sauvegarde persistante --
+                    save_data(galactica)
+                else:
+                    print("❌ Suppression annulée, flotte conservée.")
 
-                    last = input("Nom (ou 'cancel') : ")
-                    if last.lower() == "cancel":
-                        print("❌ Ajout annulé.")
-                        continue
+            case "4":
 
-                    # -- Saisie du genre avec validation stricte --
-                    gender = input("Genre (femme/homme/autre ou 'cancel') : ").lower()
-                    if gender == "cancel":
-                        print("❌ Ajout annulé.")
-                        continue
-                    if gender not in ["femme", "homme", "autre"]:
-                        print("❌ Genre invalide. Choisissez parmi : femme, homme, autre.")
-                        continue
-
-                    # -- Saisie et validation de l'âge --
-                    age_input = input("Âge (ou 'cancel') : ")
-                    if age_input.lower() == "cancel":
-                        print("❌ Ajout annulé.")
-                        continue
-                    try:
-                        age = int(age_input)
-                    except ValueError:
-                        print("❌ Âge invalide. Essaie encore.")
-                        continue
-
-                    # -- Création du membre selon le rôle --
-                    if role == "operator":
-                        op_role = input("Rôle de l'opérateur (pilote/technicien/commandant ou 'cancel') : ")
-                        if op_role.lower() == "cancel":
-                            print("❌ Ajout annulé.")
-                            continue
-                        member = Operator(first, last, gender, age, op_role)
-                    else:
-                        member = Mentalist(first, last, gender, age)
-
-                    # -- Confirmation avant ajout et sauvegarde --
-                    choice = input(f"Confirmer l'ajout de {first} {last} à '{ship.get_name()}' et sauvegarder ? (o/n) : ")
-                    if choice.lower() == "o":
-                        # -- Ajout en mémoire --
-                        ship.append_member(member)
-                        print("✅ Membre ajouté à", ship.get_name())
-
-                        # -- Sauvegarde persistante --
-                        save_data(galactica)
-                    else:
-                        # -- Annulation totale : aucune modification --
-                        print("❌ Ajout annulé, équipage inchangé.")
-
-
-            case "4":  # Supprimer un membre d'équipage
-                # -- Récupération des vaisseaux et vérification --
+                # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
@@ -225,13 +165,104 @@ def menu():
                 for i, ship in enumerate(fleet_ships):
                     print(i+1, "-", ship.get_name())
 
-                # -- Choix du vaisseau ou annulation --
+                # -- Choix du vaisseau --
+                idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
+                if idx_input.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                try:
+                    idx = int(idx_input) - 1  # conversion en index Python
+                except ValueError:
+                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    continue
+                if idx < 0 or idx >= len(fleet_ships):
+                    print("❌ Numéro invalide. Essaie encore.")
+                    continue
+                ship = fleet_ships[idx]
+
+                # -- Saisie du rôle avec validation stricte --
+                role = input("Type de membre (operator/mentalist ou 'cancel') : ").lower()
+                if role == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                if role not in ["operator", "mentalist"]:
+                    print("❌ Type invalide. Choisissez parmi : operator, mentalist.")
+                    continue
+
+                # -- Saisie prénom et nom --
+                first = input("Prénom (ou 'cancel') : ")
+                if first.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                last = input("Nom (ou 'cancel') : ")
+                if last.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+
+                # -- Saisie du genre avec validation stricte --
+                gender = input("Genre (femme/homme/autre ou 'cancel') : ").lower()
+                if gender == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                if gender not in ["femme", "homme", "autre"]:
+                    print("❌ Genre invalide. Choisissez parmi : femme, homme, autre.")
+                    continue
+
+                # -- Saisie et validation de l'âge --
+                age_input = input("Âge (ou 'cancel') : ")
+                if age_input.lower() == "cancel":
+                    print("❌ Ajout annulé.")
+                    continue
+                try:
+                    age = int(age_input)
+                except ValueError:
+                    print("❌ Âge invalide. Essaie encore.")
+                    continue
+
+                # -- Saisie du rôle spécifique si operator --
+                if role == "operator":
+                    # -- Saisie du rôle spécifique de l'opérateur --
+                    op_role = input("Rôle de l'opérateur (pilote/technicien/commandant ou 'cancel') : ").lower()
+                    if op_role == "cancel":
+                        print("❌ Ajout annulé.")
+                        continue
+                    if op_role not in ["pilote", "technicien", "commandant"]:
+                        print("❌ Rôle invalide. Choisissez parmi : pilote, technicien, commandant.")
+                        continue
+
+                    # -- Création de l'opérateur validé --
+                    member = Operator(first, last, gender, age, op_role)
+                else:
+                    # -- Création du mentaliste --
+                    member = Mentalist(first, last, gender, age)
+
+                # -- Confirmation avant ajout et sauvegarde --
+                choice = input(f"Confirmer l'ajout de {first} {last} à '{ship.get_name()}' et sauvegarder ? (o/n) : ")
+                if choice.lower() == "o":
+                    ship.append_member(member)
+                    print("✅ Membre ajouté à", ship.get_name())
+                    save_data(galactica)
+                else:
+                    print("❌ Ajout annulé, équipage inchangé.")
+
+            case "5":
+                # -- Vérification qu'il y a des vaisseaux --
+                fleet_ships = galactica.get_spaceships()
+                if not fleet_ships:
+                    print("❌ Aucun vaisseau dans la flotte.")
+                    continue
+
+                # -- Affichage des vaisseaux disponibles --
+                for i, ship in enumerate(fleet_ships):
+                    print(i+1, "-", ship.get_name())
+
+                # -- Choix du vaisseau --
                 idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
                 if idx_input.lower() == "cancel":
                     print("❌ Action annulée.")
                     continue
                 try:
-                    idx = int(idx_input) - 1  # conversion en index Python (base 0)
+                    idx = int(idx_input) - 1
                 except ValueError:
                     print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
                     continue
@@ -246,21 +277,23 @@ def menu():
                     print("❌ Action annulée.")
                     continue
 
+                # -- Vérification que le membre existe --
+                crew = ship.get_crew()
+                if not any(m.get_last_name().lower() == last_name.lower() for m in crew):
+                    print(f"❌ Aucun membre nommé '{last_name}' dans le vaisseau {ship.get_name()}.")
+                    continue
+
                 # -- Confirmation avant suppression et sauvegarde --
                 choice = input(f"Confirmer la suppression de '{last_name}' et sauvegarder ? (o/n) : ")
                 if choice.lower() == "o":
-                    # -- Suppression en mémoire --
                     ship.remove_member(last_name)
                     print("✅ Membre supprimé de", ship.get_name())
-
-                    # -- Sauvegarde persistante --
                     save_data(galactica)
                 else:
-                    # -- Annulation totale : aucune modification --
                     print("❌ Suppression annulée, équipage inchangé.")
 
 
-            case "5":  # Afficher les informations d'un équipage
+            case "6":  # Afficher les informations d'un équipage
                
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
@@ -291,7 +324,7 @@ def menu():
                 ship.display_crew()
 
 
-            case "6":  # Vérifier la préparation d'un vaisseau
+            case "7":  # Vérifier la préparation d'un vaisseau
             
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
@@ -325,17 +358,17 @@ def menu():
                     print("❌ Le vaisseau n'est pas prêt.")
 
                     
-            case "7":
+            case "8":
              save_data(galactica)
              print("✅ Flotte sauvegardée avec succès.")
 
-            case "8":
+            case "9":
                 global_statistics(galactica)
 
-            case "9":
+            case "10":
                 random_event(galactica)
 
-            case "10":
+            case "11":
                 print("👋 Au revoir !")
                 break
 

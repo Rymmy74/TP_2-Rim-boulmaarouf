@@ -1,36 +1,42 @@
 {
-  "_Fleet__name": "Galactica",
-  "_Fleet__spaceships": [
-    {
-      "_Spaceship__name": "Bayta",
-      "_Spaceship__shipType": "marchand",
-      "_Spaceship__condition": "opérationnel",
-      "_Spaceship__crew": [
+    "_Fleet__name": "Galactica",
+    "_Fleet__spaceships": [
         {
-          "_Member__first_name": "Bel",
-          "_Member__last_name": "Riose",
-          "_Member__gender": "Male",
-          "_Member__age": 48,
-          "_Operator__role": "commandant",
-          "_Operator__experience": 25
+            "_Spaceship__condition": "op\u00e9rationnel",
+            "_Spaceship__crew": [
+                {
+                    "_Member__age": 48,
+                    "_Member__first_name": "Bel",
+                    "_Member__gender": "Male",
+                    "_Member__last_name": "Riose",
+                    "_Operator__experience": 25,
+                    "_Operator__role": "commandant"
+                },
+                {
+                    "_Member__age": 34,
+                    "_Member__first_name": "Gaal",
+                    "_Member__gender": "Female",
+                    "_Member__last_name": "Dornick",
+                    "_Operator__experience": 12,
+                    "_Operator__role": "technicien"
+                },
+                {
+                    "_Member__age": 28,
+                    "_Member__first_name": "Salvor",
+                    "_Member__gender": "Female",
+                    "_Member__last_name": "Hardin",
+                    "_Operator__experience": 5,
+                    "_Operator__role": "armurier"
+                }
+            ],
+            "_Spaceship__name": "Bayta",
+            "_Spaceship__ship_type": "marchand"
         },
         {
-          "_Member__first_name": "Gaal",
-          "_Member__last_name": "Dornick",
-          "_Member__gender": "Female",
-          "_Member__age": 34,
-          "_Operator__role": "technicien",
-          "_Operator__experience": 12
-        },
-        {
-          "_Member__first_name": "Salvor",
-          "_Member__last_name": "Hardin",
-          "_Member__gender": "Female",
-          "_Member__age": 28,
-          "_Operator__role": "armurier",
-          "_Operator__experience": 5
+            "_Spaceship__condition": "op\u00e9rationnel",
+            "_Spaceship__crew": [],
+            "_Spaceship__name": "rim",
+            "_Spaceship__ship_type": "marchand"
         }
-      ]
-    }
-  ]
+    ]
 }
