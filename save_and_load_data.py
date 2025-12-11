@@ -1,36 +1,42 @@
 import json
-import ast
 from Fleet import Fleet
-from Spaceship import Spaceship
-from Operator import Operator
-from Mentalist import Mentalist
 
 def save_data(fleet, file_name="data.json"):
-    json_string = json.dumps(fleet.__dict__, default=lambda o: o.__dict__, sort_keys=True, indent=4)
-    json_dict = ast.literal_eval(json_string)
+    """
+    Sauvegarde la flotte dans un fichier JSON.
+    -------------------------------------------------
+    Au lieu d'utiliser fleet.__dict__ (qui expose les
+    attributs privés comme "_Spaceship__shipType"),
+    on appelle fleet.to_dict().
+
+    Chaque classe (Fleet, Spaceship, Operator, Mentalist)
+    sait maintenant se convertir en dictionnaire grâce
+    à sa méthode to_dict(). Cela rend le JSON lisible
+    et évite les erreurs de KeyError.
+    """
     with open(file_name, "w", encoding="utf-8") as f:
-        json.dump(json_dict, f, indent=4)
+        json.dump(fleet.to_dict(), f, indent=4)
     print("✅ Flotte sauvegardée dans", file_name)
 
 
 def load_data(file_name="data.json"):
+    """
+    Charge une flotte depuis un fichier JSON.
+    -------------------------------------------------
+    On lit le fichier JSON et on obtient un dictionnaire.
+    Ensuite, on appelle Fleet.from_dict(data).
+
+    Grâce aux méthodes from_dict() dans chaque classe :
+    - Fleet recrée ses Spaceships
+    - Spaceship recrée ses Members
+    - Operator et Mentalist recréent leurs attributs
+
+    Résultat : on reconstruit toute la hiérarchie
+    d'objets sans manipuler les clés privées.
+    """
     with open(file_name, "r", encoding="utf-8") as f:
         data = json.load(f)
-
-    fleet = Fleet(data["_Fleet__name"])
-    for ship_data in data["_Fleet__spaceships"]:
-        ship = Spaceship(ship_data["_Spaceship__name"], ship_data["_Spaceship__shipType"], ship_data["_Spaceship__condition"])
-        for member_data in ship_data["_Spaceship__crew"]:
-            if "_Operator__role" in member_data:
-                member = Operator(member_data["_Member__first_name"], member_data["_Member__last_name"],
-                                  member_data["_Member__gender"], member_data["_Member__age"],
-                                  member_data["_Operator__role"])
-                member.set_experience(member_data["_Operator__experience"])
-            else:
-                member = Mentalist(member_data["_Member__first_name"], member_data["_Member__last_name"],
-                                   member_data["_Member__gender"], member_data["_Member__age"])
-                member.set_mana(member_data["_Mentalist__mana"])
-            ship.append_member(member)
-        fleet.append_spaceship(ship)
+    fleet = Fleet.from_dict(data)
     print("✅ Flotte chargée depuis", file_name)
     return fleet
+

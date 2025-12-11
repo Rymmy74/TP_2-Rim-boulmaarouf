@@ -11,7 +11,7 @@ class Operator(Member):
 
     def gain_experience(self):
         self.__experience += 1
-#it's like une reafestation +1
+    # it's like une reafestation +1
 
     # --- GETTERS ---
     def get_role(self): return self.__role
@@ -22,3 +22,27 @@ class Operator(Member):
     def set_experience(self, exp):
         if exp >= 0:
             self.__experience = exp
+
+    # --- Nouvelle méthode pour sauvegarde ---
+    def to_dict(self):
+        return {
+            "first_name": self.get_first_name(),
+            "last_name": self.get_last_name(),
+            "gender": self.get_gender(),
+            "age": self.get_age(),
+            "role": self.__role,
+            "experience": self.__experience
+        }
+
+    # --- Nouvelle méthode pour chargement ---
+    @staticmethod
+    def from_dict(data):
+        op = Operator(
+            data["first_name"],
+            data["last_name"],
+            data["gender"],
+            data["age"],
+            data["role"]
+        )
+        op.set_experience(data.get("experience", 0))
+        return op

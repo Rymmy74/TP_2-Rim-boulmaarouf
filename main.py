@@ -22,7 +22,7 @@ def random_event(fleet):
     event = random.choice(["attaque", "renfort"])
     if event == "attaque" and fleet.get_spaceships():
         ship = random.choice(fleet.get_spaceships())
-        ship._Spaceship__condition = "endommagé"
+        ship.set_condition("endommagé")
         print(f"⚠️ Attaque ennemie ! Le vaisseau {ship.get_name()} est endommagé.")
     elif event == "renfort" and fleet.get_spaceships():
         ship = random.choice(fleet.get_spaceships())
@@ -84,7 +84,7 @@ def menu():
                 choice = input(f"Confirmer le renommage en '{new_name}' et sauvegarder ? (o/n) : ")
                 if choice.lower() == "o":
                     # -- Application de la modification en mémoire --
-                    galactica._Fleet__name = new_name
+                    galactica.set_name(new_name)
                     print("✅ Flotte renommée en", new_name)
 
                     # -- Sauvegarde persistante dans le fichier --
@@ -334,7 +334,7 @@ def menu():
                 print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s).")
                 choice = input("Voulez-vous vraiment supprimer toute la flotte ? (o/n) : ")
                 if choice.lower() == "o":
-                    galactica._Fleet__spaceships.clear()
+                    galactica.clear_spaceships()
                     print("🗑️ Flotte supprimée avec succès.")
                     save_data(galactica)
                 else:
