@@ -68,7 +68,7 @@ def menu():
         print("8. Sauvegarder la flotte")
         print("9. Afficher les statistiques globales")
         print("10. Déclencher un événement aléatoire")
-        print("11. Quitter")
+        print("1. Quitter")
 
         choice = input("Choisissez une option : ")
 
@@ -127,33 +127,8 @@ def menu():
                     # -- Annulation totale : aucune modification --
                     print("❌ Ajout annulé, flotte inchangée.")
 
+
             case "3":
-                # -- Vérification de la flotte --
-                fleet_ships = galactica.get_spaceships()
-                if not fleet_ships:
-                    print("❌ La flotte est déjà vide.")
-                    continue
-
-                # -- Compter les vaisseaux et les membres --
-                total_ships = len(fleet_ships)
-                total_members = sum(len(ship.get_crew()) for ship in fleet_ships)
-
-                # -- Informer l'utilisateur --
-                print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s) d'équipage.")
-
-                # -- Demander confirmation --
-                choice = input("Voulez-vous vraiment supprimer toute la flotte ? (o/n) : ")
-                if choice.lower() == "o":
-                    # -- Suppression : vider la liste des vaisseaux --
-                    galactica._Fleet__spaceships.clear()
-                    print("🗑️ Flotte supprimée avec succès.")
-
-                    # -- Sauvegarde persistante --
-                    save_data(galactica)
-                else:
-                    print("❌ Suppression annulée, flotte conservée.")
-
-            case "4":
 
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
@@ -245,7 +220,7 @@ def menu():
                 else:
                     print("❌ Ajout annulé, équipage inchangé.")
 
-            case "5":
+            case "4":
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
@@ -293,7 +268,7 @@ def menu():
                     print("❌ Suppression annulée, équipage inchangé.")
 
 
-            case "6":  # Afficher les informations d'un équipage
+            case "5":  # Afficher les informations d'un équipage
                
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
@@ -324,7 +299,7 @@ def menu():
                 ship.display_crew()
 
 
-            case "7":  # Vérifier la préparation d'un vaisseau
+            case "6":  # Vérifier la préparation d'un vaisseau
             
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
@@ -358,17 +333,17 @@ def menu():
                     print("❌ Le vaisseau n'est pas prêt.")
 
                     
-            case "8":
+            case "7":
              save_data(galactica)
              print("✅ Flotte sauvegardée avec succès.")
 
-            case "9":
+            case "8":
                 global_statistics(galactica)
 
-            case "10":
+            case "9":
                 random_event(galactica)
 
-            case "11":
+            case "10":
                 print("👋 Au revoir !")
                 break
 
