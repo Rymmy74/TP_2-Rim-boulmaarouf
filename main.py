@@ -2,7 +2,7 @@ from Fleet import Fleet
 from Spaceship import Spaceship
 from Operator import Operator
 from Mentalist import Mentalist
-from save_and_load_date import save_data, load_data
+from save_and_load_data import save_data, load_data
 import random
 
 # --- Fonction utilitaire pour proposer la sauvegarde ---
@@ -73,18 +73,20 @@ def menu():
 
         match choice:
             case "1":
+                
                 new_name = input("Nouveau nom de la flotte (ou 'cancel') : ")
                 if new_name.lower() == "cancel":
                     print("❌ Action annulée.")
                     continue
-                galactica._Fleet__name = new_name
-                print("✅ Flotte renommée en", new_name)
 
-                choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ")
+                choice = input(f"Voulez-vous renommer la flotte en '{new_name}' et sauvegarder ? (o/n) : ")
                 if choice.lower() == "o":
+                    galactica._Fleet__name = new_name
+                    print("✅ Flotte renommée en", new_name)
                     save_data(galactica)
                 else:
-                    print("❌ Sauvegarde annulée.")
+                    print("❌ Renommage annulé, flotte inchangée.")
+
 
             case "2":
                 name = input("Nom du vaisseau (ou 'cancel') : ")
@@ -102,11 +104,8 @@ def menu():
                 ship = Spaceship(name, ship_type)
                 galactica.append_spaceship(ship)
                 print("✅ Vaisseau ajouté :", name, "de type", ship_type)
-                choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ")
-                if choice.lower() == "o":
-                    save_data(galactica)
-                else:
-                    print("❌ Sauvegarde annulée.")
+
+                ask_save(galactica)
 
             case "3":  # Ajouter un membre d'équipage
                 fleet_ships = galactica.get_spaceships()
@@ -167,12 +166,7 @@ def menu():
                 ship.append_member(member)
                 print("✅ Membre ajouté à", ship.get_name())
 
-                choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ")
-                if choice.lower() == "o":
-                    save_data(galactica)
-                else:
-                    print("❌ Sauvegarde annulée.")
-
+                ask_save(galactica)
 
             case "4":  # Supprimer un membre d'équipage
                 fleet_ships = galactica.get_spaceships()
@@ -200,11 +194,7 @@ def menu():
                     continue
                 ship.remove_member(last_name)
 
-                choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ")
-                if choice.lower() == "o":
-                    save_data(galactica)
-                else:
-                    print("❌ Sauvegarde annulée.")
+                ask_save(galactica)
 
             case "5":  # Afficher les informations d'un équipage
                 fleet_ships = galactica.get_spaceships()
@@ -253,8 +243,7 @@ def menu():
                     print("✅ Le vaisseau est prêt au départ !")
                 else:
                     print("❌ Le vaisseau n'est pas prêt.")
-
-
+                    
             case "7":
              save_data(galactica)
              print("✅ Flotte sauvegardée avec succès.")
