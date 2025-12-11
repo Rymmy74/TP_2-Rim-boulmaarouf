@@ -60,15 +60,15 @@ def menu():
         print("\n=== Gestion de la flotte :", galactica.get_name(), "===")
         print("1. Renommer la flotte")
         print("2. Ajouter un vaisseau à la flotte")
-        print("3. Enlever la flotte")
-        print("4. Ajouter un membre d'équipage")
-        print("5. Supprimer un membre d'équipage")
-        print("6. Afficher les informations d'un équipage")
+        print("3. Ajouter un membre d'équipage")
+        print("4. Supprimer un membre d'équipage")
+        print("5. Afficher les informations d'un équipage")
+        print("6. Enlever la flotte")
         print("7. Vérifier la préparation d'un vaisseau")
         print("8. Sauvegarder la flotte")
         print("9. Afficher les statistiques globales")
         print("10. Déclencher un événement aléatoire")
-        print("1. Quitter")
+        print("11. Quitter")
 
         choice = input("Choisissez une option : ")
 
@@ -332,18 +332,43 @@ def menu():
                 else:
                     print("❌ Le vaisseau n'est pas prêt.")
 
-                    
             case "7":
+                # -- Vérification de la flotte --
+                fleet_ships = galactica.get_spaceships()
+                if not fleet_ships:
+                    print("❌ La flotte est déjà vide.")
+                    continue
+
+                # -- Compter les vaisseaux et les membres --
+                total_ships = len(fleet_ships)
+                total_members = sum(len(ship.get_crew()) for ship in fleet_ships)
+
+                # -- Informer l'utilisateur --
+                print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s) d'équipage.")
+
+                # -- Confirmation avant suppression --
+                choice = input("Voulez-vous vraiment supprimer toute la flotte ? (o/n) : ")
+                if choice.lower() == "o":
+                    # -- Suppression en mémoire --
+                    galactica._Fleet__spaceships.clear()
+                    print("🗑️ Flotte supprimée avec succès.")
+
+                    # -- Sauvegarde persistante --
+                    save_data(galactica)
+                else:
+                    print("❌ Suppression annulée, flotte conservée.")
+
+            case "8":
              save_data(galactica)
              print("✅ Flotte sauvegardée avec succès.")
 
-            case "8":
+            case "9":
                 global_statistics(galactica)
 
-            case "9":
+            case "10":
                 random_event(galactica)
 
-            case "10":
+            case "11":
                 print("👋 Au revoir !")
                 break
 
