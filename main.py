@@ -63,8 +63,8 @@ def menu():
         print("3. Ajouter un membre d'équipage")
         print("4. Supprimer un membre d'équipage")
         print("5. Afficher les informations d'un équipage")
-        print("6. Enlever la flotte")
-        print("7. Vérifier la préparation d'un vaisseau")
+        print("6. Vérifier la préparation d'un vaisseau")
+        print("7. Supprimer la flotte")
         print("8. Sauvegarder la flotte")
         print("9. Afficher les statistiques globales")
         print("10. Déclencher un événement aléatoire")
@@ -300,18 +300,12 @@ def menu():
 
 
             case "6":  # Vérifier la préparation d'un vaisseau
-            
-                # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
                     continue
-
-                # -- Affichage des vaisseaux disponibles --
                 for i, ship in enumerate(fleet_ships):
                     print(i+1, "-", ship.get_name())
-
-                # -- Choix du vaisseau --
                 idx_input = input("Choisissez un vaisseau (ou 'cancel') : ")
                 if idx_input.lower() == "cancel":
                     print("❌ Action annulée.")
@@ -319,48 +313,36 @@ def menu():
                 try:
                     idx = int(idx_input) - 1
                 except ValueError:
-                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    print("😅 Oups ! Ce n'était pas un numéro.")
                     continue
                 if idx < 0 or idx >= len(fleet_ships):
-                    print("❌ Numéro invalide. Essaie encore.")
+                    print("❌ Numéro invalide.")
                     continue
-
-                # -- Vérification de la préparation --
                 ship = fleet_ships[idx]
                 if ship.check_preparation():
                     print("✅ Le vaisseau est prêt au départ !")
                 else:
                     print("❌ Le vaisseau n'est pas prêt.")
 
-            case "7":
-                # -- Vérification de la flotte --
+            case "7":  # Supprimer toute la flotte
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ La flotte est déjà vide.")
                     continue
-
-                # -- Compter les vaisseaux et les membres --
                 total_ships = len(fleet_ships)
                 total_members = sum(len(ship.get_crew()) for ship in fleet_ships)
-
-                # -- Informer l'utilisateur --
-                print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s) d'équipage.")
-
-                # -- Confirmation avant suppression --
+                print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s).")
                 choice = input("Voulez-vous vraiment supprimer toute la flotte ? (o/n) : ")
                 if choice.lower() == "o":
-                    # -- Suppression en mémoire --
                     galactica._Fleet__spaceships.clear()
                     print("🗑️ Flotte supprimée avec succès.")
-
-                    # -- Sauvegarde persistante --
                     save_data(galactica)
                 else:
                     print("❌ Suppression annulée, flotte conservée.")
 
             case "8":
-             save_data(galactica)
-             print("✅ Flotte sauvegardée avec succès.")
+                save_data(galactica)
+                print("✅ Flotte sauvegardée avec succès.")
 
             case "9":
                 global_statistics(galactica)
