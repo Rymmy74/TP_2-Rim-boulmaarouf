@@ -60,11 +60,11 @@ def menu():
         print("\n=== Gestion de la flotte :", galactica.get_name(), "===")
         print("1. Renommer la flotte")
         print("2. Ajouter un vaisseau à la flotte")
-        print("3. Ajouter un membre d'équipage")
-        print("4. Supprimer un membre d'équipage")
-        print("5. Afficher les informations d'un équipage")
-        print("6. Vérifier la préparation d'un vaisseau")
-        print("7. Supprimer la flotte")
+        print("3. Supprimer la flotte")   # <-- déplacé ici
+        print("4. Ajouter un membre d'équipage")
+        print("5. Supprimer un membre d'équipage")
+        print("6. Afficher les informations d'un équipage")
+        print("7. Vérifier la préparation d'un vaisseau")
         print("8. Sauvegarder la flotte")
         print("9. Afficher les statistiques globales")
         print("10. Déclencher un événement aléatoire")
@@ -127,8 +127,23 @@ def menu():
                     # -- Annulation totale : aucune modification --
                     print("❌ Ajout annulé, flotte inchangée.")
 
+            case "3":  # Supprimer la flotte
+                fleet_ships = galactica.get_spaceships()
+                if not fleet_ships:
+                    print("❌ La flotte est déjà vide.")
+                    continue
+                total_ships = len(fleet_ships)
+                total_members = sum(len(ship.get_crew()) for ship in fleet_ships)
+                print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s).")
+                choice = input("Voulez-vous vraiment supprimer toute la flotte ? (o/n) : ")
+                if choice.lower() == "o":
+                    galactica._Fleet__spaceships.clear()
+                    print("🗑️ Flotte supprimée avec succès.")
+                    save_data(galactica)
+                else:
+                    print("❌ Suppression annulée, flotte conservée.")
 
-            case "3":
+            case "4":
 
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
@@ -220,7 +235,7 @@ def menu():
                 else:
                     print("❌ Ajout annulé, équipage inchangé.")
 
-            case "4":
+            case "5":
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
@@ -268,7 +283,7 @@ def menu():
                     print("❌ Suppression annulée, équipage inchangé.")
 
 
-            case "5":  # Afficher les informations d'un équipage
+            case "6":  # Afficher les informations d'un équipage
                
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
@@ -299,7 +314,7 @@ def menu():
                 ship.display_crew()
 
 
-            case "6":  # Vérifier la préparation d'un vaisseau
+            case "7":  # Vérifier la préparation d'un vaisseau
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
@@ -324,7 +339,7 @@ def menu():
                 else:
                     print("❌ Le vaisseau n'est pas prêt.")
 
-            case "7":  # Supprimer toute la flotte
+            case "8":  # Supprimer toute la flotte
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ La flotte est déjà vide.")
@@ -340,17 +355,17 @@ def menu():
                 else:
                     print("❌ Suppression annulée, flotte conservée.")
 
-            case "8":
+            case "9":
                 save_data(galactica)
                 print("✅ Flotte sauvegardée avec succès.")
 
-            case "9":
+            case "10":
                 global_statistics(galactica)
 
-            case "10":
+            case "11":
                 random_event(galactica)
 
-            case "11":
+            case "12":
                 print("👋 Au revoir !")
                 break
 
