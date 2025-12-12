@@ -31,12 +31,6 @@
             ],
             "_Spaceship__name": "Bayta",
             "_Spaceship__ship_type": "transport"
-        },
-        {
-            "_Spaceship__condition": "op\u00e9rationnel",
-            "_Spaceship__crew": [],
-            "_Spaceship__name": "Rim",
-            "_Spaceship__ship_type": "transport"
         }
     ]
 }
