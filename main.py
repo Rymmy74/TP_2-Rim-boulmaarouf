@@ -65,11 +65,10 @@ def menu():
         print("5. Supprimer un membre d'équipage")
         print("6. Afficher les informations d'un équipage")
         print("7. Vérifier la préparation d'un vaisseau")
-        print("8. Supprimer la flotte")
-        print("9. Sauvegarder la flotte")
-        print("10. Afficher les statistiques globales")
-        print("11. Déclencher un événement aléatoire")
-        print("12. Quitter")
+        print("8. Sauvegarder la flotte")
+        print("9. Afficher les statistiques globales")
+        print("10. Déclencher un événement aléatoire")
+        print("11. Quitter")
 
         choice = input("Choisissez une option : ")
 
@@ -398,43 +397,18 @@ def menu():
                     print("   Raisons :")
                     for r in reasons:
                         print("   -", r)
-
-
                         
-
-            case "8":  # Supprimer toute la flotte
-                fleet_ships = galactica.get_spaceships()
-                if not fleet_ships:
-                    print("❌ La flotte est déjà vide.")
-                    continue
-
-                total_ships = len(fleet_ships)
-                total_members = sum(len(ship.get_crew()) for ship in fleet_ships)
-                print(f"⚠️ La flotte contient {total_ships} vaisseau(x) et {total_members} membre(s).")
-
-                # -- Confirmation avant suppression --
-                choice = input("Voulez-vous vraiment supprimer toute la flotte ? (o/n) : ")
-                if choice.lower() == "o":
-                    galactica._Fleet__spaceships.clear()
-                    print("🗑️ Flotte supprimée avec succès.")
-
-                    # -- Sauvegarde (demande séparée) --
-                    ask_save(galactica)
-                else:
-                    print("❌ Suppression annulée, flotte conservée.")
-
-
-            case "9":
+            case "8":
                 save_data(galactica)
                 print("✅ Flotte sauvegardée avec succès.")
 
-            case "10":
+            case "9":
                 global_statistics(galactica)
 
-            case "11":
+            case "10":
                 random_event(galactica)
 
-            case "12":
+            case "11":
                 print("👋 Au revoir !")
                 break
 
