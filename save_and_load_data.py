@@ -12,10 +12,29 @@ def save_data(fleet, file_name="data.json"):
     Ici on utilise fleet.__dict__ et les __dict__ des objets
     pour capturer tous les attributs privés (ex: "_Spaceship__shipType").
     """
+
+    # 1. Conversion de l'objet Fleet en une chaîne JSON
+    # - fleet.__dict__ : récupère le dictionnaire interne de l'objet Fleet
+    #   (par ex. {"_Fleet__name": "Galactica", "_Fleet__spaceships": [...]})
+    # - default=lambda o: o.__dict__ : si json.dumps rencontre un objet
+    #   (Spaceship, Operator, Mentalist), il le convertit aussi en dictionnaire
+    #   en utilisant son __dict__.
+    # - sort_keys=True : trie les clés par ordre alphabétique pour plus de lisibilité.
+    # - indent=4 : ajoute une indentation de 4 espaces pour un fichier lisible.
     json_string = json.dumps(fleet.__dict__, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+
+    # 2. Transformation de la chaîne JSON en dictionnaire Python
+    # Ici, on utilise ast.literal_eval pour réinterpréter la chaîne comme un dict.
+    # (Remarque : on pourrait aussi utiliser json.loads(json_string), plus classique.)
     json_dict = ast.literal_eval(json_string)
+
+    # 3. Ouverture du fichier en écriture (UTF-8)
     with open(file_name, "w", encoding="utf-8") as f:
+        # 4. Écriture du dictionnaire Python dans le fichier au format JSON
+        # indent=4 : garde une indentation lisible dans le fichier.
         json.dump(json_dict, f, indent=4)
+
+    # 5. Message de confirmation pour l'utilisateur
     print("✅ Flotte sauvegardée dans", file_name)
 
 
