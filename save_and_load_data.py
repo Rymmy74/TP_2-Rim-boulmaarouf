@@ -29,20 +29,37 @@ def load_data(file_name="data.json"):
     with open(file_name, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    fleet = Fleet(data["_Fleet__name"])
-    for ship_data in data["_Fleet__spaceships"]:
-        ship = Spaceship(ship_data["_Spaceship__name"], ship_data["_Spaceship__shipType"], ship_data["_Spaceship__condition"])
-        for member_data in ship_data["_Spaceship__crew"]:
+    # -- Reconstruction de la flotte --
+    fleet_name = data.get("_Fleet__name")
+    fleet = Fleet(fleet_name)
+
+    # -- Reconstruction des vaisseaux --
+    for ship_data in data.get("_Fleet__spaceships", []):
+        ship_name = ship_data.get("_Spaceship__name")
+        ship_type = ship_data.get("_Spaceship__shipType", "transport")  # valeur par défaut si absent
+        ship_condition = ship_data.get("_Spaceship__condition", 100)    # valeur par défaut si absent
+        ship = Spaceship(ship_name, ship_type, ship_condition)
+
+        # -- Reconstruction de l'équipage --
+        for member_data in ship_data.get("_Spaceship__crew", []):
+            first = member_data.get("_Member__first_name")
+            last = member_data.get("_Member__last_name")
+            gender = member_data.get("_Member__gender")
+            age = member_data.get("_Member__age")
+
             if "_Operator__role" in member_data:
-                member = Operator(member_data["_Member__first_name"], member_data["_Member__last_name"],
-                                  member_data["_Member__gender"], member_data["_Member__age"],
-                                  member_data["_Operator__role"])
-                member.set_experience(member_data["_Operator__experience"])
+                role = member_data.get("_Operator__role")
+                experience = member_data.get("_Operator__experience", 0)
+                member = Operator(first, last, gender, age, role)
+                member.set_experience(experience)
             else:
-                member = Mentalist(member_data["_Member__first_name"], member_data["_Member__last_name"],
-                                   member_data["_Member__gender"], member_data["_Member__age"])
-                member.set_mana(member_data["_Mentalist__mana"])
+                mana = member_data.get("_Mentalist__mana", 0)
+                member = Mentalist(first, last, gender, age)
+                member.set_mana(mana)
+
             ship.append_member(member)
+
         fleet.append_spaceship(ship)
+
     print("✅ Flotte chargée depuis", file_name)
     return fleet
