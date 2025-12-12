@@ -65,10 +65,11 @@ def menu():
         print("5. Supprimer un membre d'équipage")
         print("6. Afficher les informations d'un équipage")
         print("7. Vérifier la préparation d'un vaisseau")
-        print("8. Sauvegarder la flotte")
-        print("9. Afficher les statistiques globales")
-        print("10. Déclencher un événement aléatoire")
-        print("11. Quitter")
+        print("8. Supprimer la flotte")
+        print("9. Sauvegarder la flotte")
+        print("10. Afficher les statistiques globales")
+        print("11. Déclencher un événement aléatoire")
+        print("12. Quitter")
 
         choice = input("Choisissez une option : ")
 
@@ -187,11 +188,11 @@ def menu():
                     ship = fleet_ships[idx]
 
                     # -- Saisie du rôle avec validation stricte --
-                    role = input("Type de membre (operator/mentalist ou 'cancel') : ").lower()
+                    role = input("Type de membre (operateur/mentaliste ou 'cancel') : ").lower()
                     if role == "cancel":
                         print("❌ Ajout annulé.")
                         continue
-                    if role not in ["operator", "mentalist"]:
+                    if role not in ["operateur", "mentaliste"]:
                         print("❌ Type invalide. Choisissez parmi : operator, mentalist.")
                         continue
 
@@ -301,6 +302,7 @@ def menu():
 
 
             case "6":  # Afficher les informations d'un équipage
+                        
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
@@ -329,13 +331,36 @@ def menu():
 
                 # -- Affichage des informations d'équipage --
                 ship = fleet_ships[idx]
+                crew = ship.get_crew()
+
+                print("\n" + "="*40)
                 print(f"👥 Équipage du vaisseau '{ship.get_name()}':")
-                ship.display_crew()
+                print("="*40)
+
+                if not crew:
+                    print("❌ Aucun membre dans l'équipage.")
+                else:
+                    for i, member in enumerate(crew, start=1):
+                        print(f"\n🔹 Membre {i}")
+                        print(f"   Nom complet : {member.get_first_name()} {member.get_last_name()}")
+                        print(f"   Genre       : {member.get_gender()}")
+                        print(f"   Âge         : {member.get_age()} ans")
+                        print(f"   Rôle        : {member.get_role()}")
+
+                        # -- Affichage spécifique selon le type --
+                        if isinstance(member, Operator):
+                            print(f"    Type        : Opérateur ({member.get_role()})")
+                            print(f"   Expérience  : {member.get_experience()} XP")
+                        elif isinstance(member, Mentalist):
+                            print("   Type        : Mentaliste")
+                            print(f"   Mana        : {member.get_mana()}")
+
+                print("="*40 + "\n")
+
 
 
 
             case "7":  # Vérifier la préparation d'un vaisseau
-                # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
                     print("❌ Aucun vaisseau dans la flotte.")
@@ -354,19 +379,26 @@ def menu():
                 try:
                     idx = int(idx_input) - 1
                 except ValueError:
-                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    print("😅 Oups ! Ce n'était pas un numéro.")
                     continue
 
                 if idx < 0 or idx >= len(fleet_ships):
-                    print("❌ Numéro invalide. Essaie encore.")
+                    print("❌ Numéro invalide.")
                     continue
 
-                # -- Vérification de la préparation --
                 ship = fleet_ships[idx]
-                if ship.check_preparation():
+
+                # -- Utilisation du nouveau check_preparation --
+                ready, reasons = ship.check_preparation()
+
+                if ready:
                     print(f"✅ Le vaisseau '{ship.get_name()}' est prêt au départ !")
                 else:
                     print(f"❌ Le vaisseau '{ship.get_name()}' n'est pas prêt.")
+                    print("   Raisons :")
+                    for r in reasons:
+                        print("   -", r)
+
 
                         
 
