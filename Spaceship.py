@@ -27,12 +27,31 @@ class Spaceship:
                 return
         print(f"Aucun membre nommé {last_name} trouvé.")
 
-    def display_crew(self):   # <-- méthode appelée dans main.py
+    def display_crew(self):
+        print("\n" + "="*40)
+        print(f"👥 Équipage du vaisseau '{self.get_name()}':")
+        print("="*40)
+
         if not self.__crew:
-            print("Aucun membre dans l'équipage.")
+            print("❌ Aucun membre dans l'équipage.")
         else:
-            for m in self.__crew:
-                print(m.introduce_yourself())
+            for i, member in enumerate(self.__crew, start=1):
+                print(f"\n🔹 Membre {i}")
+                print(f"   Nom complet : {member.get_first_name()} {member.get_last_name()}")
+                print(f"   Genre       : {member.get_gender()}")
+                print(f"   Âge         : {member.get_age()} ans")
+                print(f"   Rôle        : {member.get_role()}")
+
+                # -- Affichage spécifique selon le type --
+                if isinstance(member, Operator):
+                    print(f"   Type        : Opérateur ({member.get_role()})")
+                    print(f"   Expérience  : {member.get_experience()} XP")
+                elif isinstance(member, Mentalist):
+                    print("   Type        : Mentaliste")
+                    print(f"   Mana        : {member.get_mana()}")
+
+        print("="*40 + "\n")
+
 
     def check_preparation(self):
         reasons = []
