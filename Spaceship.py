@@ -45,6 +45,16 @@ class Spaceship:
     def get_ship_type(self): return self.__ship_type
     def get_condition(self): return self.__condition
     def get_crew(self): return self.__crew
+    
+    # --- SETTERS ---
+    def set_name(self, new_name):
+        self.__name = new_name
+
+    def set_ship_type(self, new_type):
+        self.__ship_type = new_type
+
+    def set_condition(self, new_condition):
+        self.__condition = new_condition
 
     """ def append_member(self, member):
         if isinstance(member, (Operator, Mentalist)):               

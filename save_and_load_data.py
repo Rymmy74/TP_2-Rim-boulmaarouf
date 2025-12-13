@@ -7,10 +7,8 @@ from Mentalist import Mentalist
 
 def save_data(fleet, file_name="data.json"):
     """
-    Sauvegarde la flotte en JSON.
-    -------------------------------------------------
-    Ici on utilise fleet.__dict__ et les __dict__ des objets
-    pour capturer tous les attributs privés (ex: "_Spaceship__shipType").
+    Sauvegarde moderne de la flotte en JSON.
+    Chaque classe sait se convertir en dict via to_dict().
     """
     json_string = json.dumps(fleet.__dict__, default=lambda o: o.__dict__, sort_keys=True, indent=4)
     json_dict = ast.literal_eval(json_string)
@@ -22,9 +20,7 @@ def save_data(fleet, file_name="data.json"):
 def load_data(file_name="data.json"):
     """
     Recharge la flotte depuis un fichier JSON.
-    -------------------------------------------------
-    On reconstruit manuellement Fleet, Spaceship, Operator, Mentalist
-    en lisant les clés privées (ex: "_Fleet__name").
+    Chaque classe sait se reconstruire via from_dict().
     """
     with open(file_name, "r", encoding="utf-8") as f:
         data = json.load(f)
